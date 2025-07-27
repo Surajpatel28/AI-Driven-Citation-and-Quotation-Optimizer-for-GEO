@@ -89,20 +89,18 @@ if st.session_state.optimized:
         st.session_state.current_input = ""
         st.session_state.processing_time = 0
 
-
-
-# --- Simulated AI Response (remains commented for now)
-# if st.session_state.article_text and st.session_state.optimized_text:
-#     st.subheader("Simulated AI Responses")
-#     user_query = st.text_input("Try a user query (e.g., 'What are current climate stats?')", "")
-#     if user_query and st.button("Run Simulation"):
-#         with st.spinner("Simulating AI response..."):
-#             original_resp = simulate_ai_response(st.session_state.article_text, user_query)
-#             optimized_resp = simulate_ai_response(st.session_state.optimized_text, user_query)
-#         col1, col2 = st.columns(2)
-#         with col1:
-#             st.markdown("### Original Response")
-#             st.write(original_resp)
-#         with col2:
-#             st.markdown("### Optimized Response")
-#             st.write(optimized_resp)
+# simulated ai response
+if st.session_state.article_text and st.session_state.optimized_text:
+    st.subheader("Simulated AI Responses")
+    user_query = st.text_input("Try a user query (e.g., 'What are current climate stats?')", "")
+    if user_query and st.button("Run Simulation"):
+        with st.spinner("Simulating AI response..."):
+            original_resp = simulate_ai_response(st.session_state.article_text, user_query)
+            optimized_resp = simulate_ai_response(st.session_state.optimized_text, user_query)
+        col1, col2 = st.columns(2)
+        with col1:
+            st.markdown("### Original Response")
+            st.write(original_resp)
+        with col2:
+            st.markdown("### Optimized Response")
+            st.write(optimized_resp)

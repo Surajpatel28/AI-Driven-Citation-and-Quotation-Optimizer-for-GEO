@@ -168,7 +168,6 @@ def preprocess_content(text: str) -> dict:
         "weak_sentences": weak_sentences
     }
 
-
 def classify_input_type(text: str) -> str:
     text = text.strip()
     word_count = len(text.split())
