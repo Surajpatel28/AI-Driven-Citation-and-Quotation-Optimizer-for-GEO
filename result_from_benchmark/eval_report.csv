@@ -1,0 +1,11 @@
+has_citation,has_statistic,has_quote,word_count,structure_check
+True,True,True,157,True
+True,True,True,156,True
+True,True,True,227,True
+True,True,True,168,True
+True,True,True,133,True
+False,True,True,139,True
+False,True,True,164,True
+False,True,True,171,True
+False,True,True,191,True
+False,False,True,144,True

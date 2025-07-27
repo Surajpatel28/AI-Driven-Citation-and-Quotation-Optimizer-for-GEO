@@ -2,6 +2,20 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
+def classify_input_type(text: str) -> str:
+    text = text.strip()
+    word_count = len(text.split())
+
+    # Basic query indicators
+    query_indicators = ["what", "why", "how", "when", "where", "who", "which", "whom", "whose","is", "are", "can", "do"]
+
+    if word_count < 12 and text.endswith("?"):
+        return "query"
+    elif word_count < 40:
+        return "blurb"
+    else:
+        return "article"
+
 def is_url(text: str)->bool:
     url_pattern = re.compile(
         r'^(https?://)?(www\.)?([A-Za-z_0-9-]+)+(\.[a-z]{2,})+(/[^\s]*)?$'
