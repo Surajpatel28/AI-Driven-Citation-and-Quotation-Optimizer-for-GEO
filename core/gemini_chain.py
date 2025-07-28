@@ -24,23 +24,18 @@ from langchain_core.prompts import PromptTemplate
 load_dotenv()
 
  # Initialize Gemini LLM once (singleton)
-llm = GoogleGenerativeAI(model="gemini-2.5-pro", temperature=0.4)
+llm = GoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.3)
 
 # dynamic prompt building
 def build_prompt(raw_text, preprocessed):
     # Modular prompt sections
     instructions = (
-        "IMPORTANT: Every output MUST include at least one authoritative citation (URL, source, or reference), one expert quote, and one relevant statistic. Outputs missing any of these will be considered incomplete.\n\n"
+        "Each output must include: 1 citation (URL/source), 1 expert quote, and 1 recent statistic. Missing any of these = incomplete.\n\n"
         "You are an expert AI content editor trained in Generative Engine Optimization (GEO), specializing in enhancing content for large language models like Google Gemini, ChatGPT, Claude, and Perplexity.\n\n"
         "Your goal is to optimize the following content by automatically injecting authoritative citations, expert quotations, relevant statistics, and institutional references. As shown in the 2025 GEO framework updates, this can improve visibility in AI-driven search by up to 40%.\n\n"
         "The optimization must follow E-E-A-T principles (Experience, Expertise, Authoritativeness, Trustworthiness) and should preserve the original meaning and tone while improving credibility, fluency, uniqueness, and engagement.\n"
     )
 
-    # Few-shot example (edit as needed for your domain)
-    few_shot_example = (
-        "Example Output:\n"
-        "Global warming is the long-term rise in Earth's average surface temperature, primarily due to human activities (NASA, 2023). According to Dr. Jane Smith, climate scientist at the UN, \"The evidence for rapid climate change is compelling.\" In 2022, global CO2 levels reached 419 ppm, the highest in 800,000 years (Source: https://climate.nasa.gov/vital-signs/carbon-dioxide/).\n"
-    )
      # Content section
     sentences = " ".join(preprocessed["sentences"])
     content_section = f"Content to Optimize:\n{sentences}\n"
@@ -71,14 +66,12 @@ def build_prompt(raw_text, preprocessed):
     3. Include a recent, relevant statistic with source.
     4. Add at least one authoritative citation (URL, journal, or institution).
     5. Structure the output clearly (paragraphs, bullet points if needed).
-    6. Keep the output under 500 words.
-    7. Do NOT include explanations or commentary—only the optimized content.
-
+    
     Checklist (ensure all are present):
-    - [ ] At least one citation
-    - [ ] At least one expert quote
-    - [ ] At least one statistic
-    - [ ] Clear structure
+    - At least one citation
+    - At least one expert quote
+    - At least one statistic
+    - Clear structure
     """
     # Output format and constraints
     output_format = (
@@ -90,7 +83,6 @@ def build_prompt(raw_text, preprocessed):
     # Assemble the prompt
     prompt = "\n".join([
         instructions,
-        few_shot_example,
         content_section,
         context_section if context_section else "",
         enhancement_instructions,
@@ -136,15 +128,18 @@ def generate_answer_for_query(query: str) -> str:
     prompt = PromptTemplate(
         input_variables=["content"],
         template="""
-        You're an expert content optimizer.
-        Answer the following question in a way that is highly optimized for generative engines like ChatGPT:
-            - Include citations (sources like UN, WHO, etc.)
-            - Include relevant statistics and data
-            - Add expert quotes if relevant
-            - Write clearly and concisely
-        Keep the total response length under 200 words but include at least one quote, one stat, and one citation.
+        You are an expert AI editor trained in Generative Engine Optimization (GEO). Your task is to enhance the following content by rewriting it using the E-E-A-T principles: Experience, Expertise, Authoritativeness, and Trustworthiness.
 
-        Question: {content}
+        For the given query, generate a well-structured response that includes:
+        - One authoritative citation (URL, institution, or journal)
+        - One expert quote (real or attributed)
+        - One relevant statistic (with source)
+
+        Be concise, fluent, and informative. Output should be under 200 words and written in a natural, professional tone.
+
+        Query: {content}
+
+        Return only the final enhanced content. Do not include explanations or checklists.
     """
     )
     query_chain = prompt | llm
@@ -152,7 +147,6 @@ def generate_answer_for_query(query: str) -> str:
     try:
         optimized_query_response = query_chain.invoke({"content": query})
         print(f"[Timing] LLM Query invoke: {time.time() - t0:.3f}s")
-        print(f"LLM Query Output: {optimized_query_response[:500]}...")  # Print first 500 chars for debugging
         return optimized_query_response
     except Exception as e:
         logging.error(f"LLM invocation failed for query: {e}", exc_info=True)

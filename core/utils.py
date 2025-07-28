@@ -181,7 +181,7 @@ def classify_input_type(text: str) -> str:
     # Use regex to detect query phrases at start
     query_pattern = re.compile(r"^(?:" + "|".join(re.escape(q) for q in query_keywords) + r")\b", re.IGNORECASE)
 
-    if text.endswith("?") or query_pattern.match(text):
+    if text.endswith("?") and query_pattern.match(text):
         return "query"
     elif word_count < 40:
         return "blurb"
