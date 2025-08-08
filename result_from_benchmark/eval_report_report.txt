@@ -1,0 +1,19 @@
+
+        GEO Optimization Evaluation Report
+        ================================
+        
+        Total Outputs Evaluated: 10
+        
+        Content Quality Metrics:
+        ----------------------
+        Citation Presence: 90.0%
+        Statistic Presence: 100.0%
+        Quote Presence: 100.0%
+        Structure Presence: 100.0%
+        
+        Content Length:
+        --------------
+        Average Word Count: 188.3
+        
+        Overall Score: 97.5%
+        

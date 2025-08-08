@@ -1,0 +1,75 @@
+2025-08-08 19:56:14,867 INFO [Timing] Total preprocessing: 0.076s
+2025-08-08 20:01:22,662 INFO [Timing] Total preprocessing: 0.052s
+2025-08-08 20:11:07,254 INFO Initialized Gemini model: gemini-2.5-flash
+2025-08-08 20:12:22,574 INFO Initialized Gemini model: gemini-2.5-flash
+2025-08-08 20:12:30,132 INFO Loading dataset: GEO-Optim/geo-bench
+2025-08-08 20:12:36,218 INFO Loaded 1000 items from dataset
+2025-08-08 20:12:36,228 INFO Starting benchmark with 10 queries
+2025-08-08 20:12:36,229 INFO Processing query 1/10
+2025-08-08 20:12:44,920 INFO Processing query 2/10
+2025-08-08 20:12:44,977 INFO [Timing] Total preprocessing: 0.056s
+2025-08-08 20:12:52,936 INFO Initialized Gemini model: gemini-2.5-flash
+2025-08-08 20:12:54,389 INFO [Timing] Total optimization: 9.469s
+2025-08-08 20:12:54,392 INFO Processing query 3/10
+2025-08-08 20:12:54,412 INFO [Timing] Total preprocessing: 0.020s
+2025-08-08 20:13:02,632 INFO Initialized Gemini model: gemini-2.5-flash
+2025-08-08 20:13:09,967 INFO Loading dataset: GEO-Optim/geo-bench
+2025-08-08 20:13:16,392 INFO Loaded 1000 items from dataset
+2025-08-08 20:13:23,161 INFO [Timing] Total optimization: 28.768s
+2025-08-08 20:13:23,161 INFO Processing query 4/10
+2025-08-08 20:13:23,184 INFO [Timing] Total preprocessing: 0.023s
+2025-08-08 20:13:31,147 INFO [Timing] Total optimization: 7.986s
+2025-08-08 20:13:31,148 INFO Processing query 5/10
+2025-08-08 20:13:39,752 INFO Processing query 6/10
+2025-08-08 20:13:39,769 INFO [Timing] Total preprocessing: 0.016s
+2025-08-08 20:13:49,219 INFO Initialized Gemini model: gemini-2.5-flash
+2025-08-08 20:13:50,525 INFO [Timing] Total optimization: 10.772s
+2025-08-08 20:13:50,525 INFO Processing query 7/10
+2025-08-08 20:13:58,022 INFO Initialized Gemini model: gemini-2.5-flash
+2025-08-08 20:13:59,826 INFO Processing query 8/10
+2025-08-08 20:13:59,845 INFO [Timing] Total preprocessing: 0.019s
+2025-08-08 20:14:06,375 INFO [Timing] Total optimization: 6.549s
+2025-08-08 20:14:06,376 INFO Processing query 9/10
+2025-08-08 20:14:06,395 INFO [Timing] Total preprocessing: 0.019s
+2025-08-08 20:14:06,801 INFO Initialized Gemini model: gemini-2.5-flash
+2025-08-08 20:14:16,282 INFO [Timing] Total optimization: 9.906s
+2025-08-08 20:14:16,282 INFO Processing query 10/10
+2025-08-08 20:14:16,305 INFO [Timing] Total preprocessing: 0.022s
+2025-08-08 20:14:27,632 INFO [Timing] Total optimization: 11.349s
+2025-08-08 20:14:27,660 INFO Benchmark results saved to result_from_benchmark\outputs.csv
+2025-08-08 20:14:27,685 INFO Loaded 10 outputs from result_from_benchmark\outputs.csv
+2025-08-08 20:14:27,689 INFO Citation presence: 90.0%
+2025-08-08 20:14:27,689 INFO Statistic presence: 100.0%
+2025-08-08 20:14:27,690 INFO Quote presence: 100.0%
+2025-08-08 20:14:27,690 INFO Structure presence: 100.0%
+2025-08-08 20:14:27,690 INFO Average word count: 188.3
+2025-08-08 20:14:27,692 INFO Evaluation results saved to result_from_benchmark\eval_report.csv
+2025-08-08 20:14:27,694 INFO Evaluation report saved to result_from_benchmark\eval_report_report.txt
+2025-08-08 20:14:27,695 INFO Benchmark and evaluation completed successfully
+2025-08-08 20:14:37,218 INFO Initialized Gemini model: gemini-2.5-flash
+2025-08-08 20:14:38,300 INFO Initialized Gemini model: gemini-2.5-flash
+2025-08-08 20:14:38,469 INFO [Timing] Total preprocessing: 0.162s
+2025-08-08 20:14:55,495 INFO [Timing] Total optimization: 17.188s
+2025-08-08 20:20:28,616 INFO Initialized Gemini model: gemini-2.5-flash
+2025-08-08 20:21:28,066 INFO Initialized Gemini model: gemini-2.5-flash
+2025-08-08 20:22:36,735 INFO Initialized Gemini model: gemini-2.5-flash
+2025-08-08 20:22:37,052 INFO Initialized Gemini model: gemini-2.5-flash
+2025-08-08 20:22:37,170 INFO [Timing] Total preprocessing: 0.111s
+2025-08-08 20:22:47,654 INFO [Timing] Total optimization: 10.596s
+2025-08-08 20:38:56,137 INFO Initialized Gemini model: gemini-1.5-flash
+2025-08-08 20:39:08,455 INFO Initialized Gemini model: gemini-1.5-flash
+2025-08-08 20:39:14,695 INFO Loading dataset: GEO-Optim/geo-bench
+2025-08-08 20:39:20,483 INFO Loaded 1000 items from dataset
+2025-08-08 21:36:39,576 INFO Initialized Gemini model: gemini-1.5-flash
+2025-08-08 21:37:35,184 INFO Initialized Gemini model: gemini-1.5-flash
+2025-08-08 21:37:41,131 INFO Loading dataset: GEO-Optim/geo-bench
+2025-08-08 21:37:48,787 INFO Loaded 1000 items from dataset
+2025-08-08 21:40:11,753 INFO Initialized Gemini model: gemini-1.5-flash
+2025-08-08 21:40:18,233 INFO Loading dataset: GEO-Optim/geo-bench
+2025-08-08 21:40:25,654 INFO Loaded 1000 items from dataset
+2025-08-08 21:49:40,679 INFO Initialized Gemini model: gemini-1.5-flash
+2025-08-08 21:58:50,355 INFO [Timing] Total preprocessing (fast): 0.016s
+2025-08-08 21:58:53,131 INFO [Timing] Total optimization: 2.793s
+2025-08-08 22:08:06,982 INFO Initialized Gemini model: gemini-1.5-flash
+2025-08-08 22:11:17,960 INFO [Timing] Total preprocessing (fast): 0.019s
+2025-08-08 22:11:20,653 INFO [Timing] Total optimization: 2.712s
