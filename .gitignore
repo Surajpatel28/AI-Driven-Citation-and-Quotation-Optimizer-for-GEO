@@ -41,8 +41,10 @@ Thumbs.db
 *LEGACY*
 *migration*
 *MIGRATION*
-*oop.py
 *_oop.py
+app_oop.py
+benchmark_oop.py
+evaluate_outputs_oop.py
 
 # Jupyter checkpoints
 .ipynb_checkpoints/
