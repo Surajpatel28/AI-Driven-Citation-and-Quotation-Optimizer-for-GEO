@@ -70,5 +70,5 @@ dist/
 **/*.pyi
 **/*.pxd
 
-# Static files (keep custom CSS)
-# static/ - commented out to keep our custom styling
+# other 
+requirements_backup.txt

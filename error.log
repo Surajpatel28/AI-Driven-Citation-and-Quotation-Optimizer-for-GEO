@@ -73,3 +73,34 @@
 2025-08-08 22:08:06,982 INFO Initialized Gemini model: gemini-1.5-flash
 2025-08-08 22:11:17,960 INFO [Timing] Total preprocessing (fast): 0.019s
 2025-08-08 22:11:20,653 INFO [Timing] Total optimization: 2.712s
+2025-08-09 16:59:30,611 INFO Initialized Gemini model: gemini-1.5-flash
+2025-08-09 17:03:04,727 INFO [Timing] Total preprocessing (fast): 0.055s
+2025-08-09 17:03:07,342 INFO [Timing] Total optimization: 2.670s
+2025-08-09 17:07:55,046 ERROR Error processing content: 'ContentProcessor' object has no attribute 'extract_from_url'
+2025-08-09 17:09:15,598 INFO [Timing] Total preprocessing (fast): 0.002s
+2025-08-09 17:09:19,778 INFO [Timing] Total optimization: 4.182s
+2025-08-09 19:43:08,710 INFO Initialized Gemini model: gemini-1.5-flash
+2025-08-09 19:45:04,275 INFO [Timing] Total preprocessing (fast): 0.025s
+2025-08-09 19:45:07,107 INFO [Timing] Total optimization: 2.858s
+2025-08-09 20:00:54,954 INFO Initialized Gemini model: gemini-1.5-flash
+2025-08-09 20:01:42,269 INFO [Timing] Total preprocessing (fast): 0.018s
+2025-08-09 20:01:46,810 INFO [Timing] Total optimization: 4.559s
+2025-08-09 20:13:12,635 INFO [Timing] Total preprocessing (fast): 0.000s
+2025-08-09 20:13:15,746 INFO [Timing] Total optimization: 3.111s
+2025-08-09 20:19:51,643 INFO [Timing] Total preprocessing (fast): 0.001s
+2025-08-09 20:19:56,394 INFO [Timing] Total optimization: 4.751s
+2025-08-09 20:28:34,922 INFO Initialized Gemini model: gemini-1.5-flash
+2025-08-09 20:30:16,138 INFO [Timing] Total preprocessing (fast): 0.024s
+2025-08-09 20:30:20,698 INFO [Timing] Total optimization: 4.584s
+2025-08-09 20:39:14,512 INFO [Timing] Total preprocessing (fast): 0.000s
+2025-08-09 20:39:17,561 INFO [Timing] Total optimization: 3.049s
+2025-08-09 20:48:40,547 INFO [Timing] Total preprocessing (fast): 0.001s
+2025-08-09 20:48:45,244 INFO [Timing] Total optimization: 4.698s
+2025-08-09 20:54:04,165 INFO [Timing] Total preprocessing (fast): 0.000s
+2025-08-09 20:54:09,079 WARNING Detected placeholders, using real data enhancement...
+2025-08-09 20:54:12,600 INFO [Timing] Total optimization: 8.435s
+2025-08-09 20:58:18,182 INFO Initialized Gemini model: gemini-1.5-flash
+2025-08-09 20:58:34,105 INFO [Timing] Total preprocessing (fast): 0.026s
+2025-08-09 20:58:38,560 INFO [Timing] Total optimization: 4.482s
+2025-08-09 21:15:07,216 INFO [Timing] Total preprocessing (fast): 0.000s
+2025-08-09 21:15:09,755 INFO [Timing] Total optimization: 2.540s

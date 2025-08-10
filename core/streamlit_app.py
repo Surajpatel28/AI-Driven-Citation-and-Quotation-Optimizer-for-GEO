@@ -8,8 +8,7 @@ GEO Citation Optimizer with clean separation of concerns.
 import streamlit as st
 import time
 import logging
-import random
-from typing import Optional
+from typing import Optional, Dict
 
 from core.content_processor import ContentProcessor
 from core.geo_optimizer import GEOOptimizer
@@ -70,54 +69,6 @@ class StreamlitApp:
             layout="wide",
             initial_sidebar_state="collapsed"
         )
-        
-        # Simple, clean CSS
-        st.markdown("""
-        <style>
-        .main {
-            padding: 2rem 1rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .stButton > button {
-            width: 100%;
-            height: 3rem;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            font-weight: 500;
-        }
-        
-        .stButton > button[kind="primary"] {
-            background-color: #0066cc;
-            color: white;
-            border: none;
-        }
-        
-        .stTextArea > div > div > textarea {
-            border-radius: 8px;
-            border: 1px solid #ddd;
-        }
-        
-        h1 {
-            color: #333;
-            margin-bottom: 0.5rem;
-        }
-        
-        .subtitle {
-            color: #666;
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
-        }
-        
-        hr {
-            margin: 2rem 0;
-            border: none;
-            border-top: 1px solid #eee;
-        }
-        </style>
-        """, unsafe_allow_html=True)
-    
     
     def _initialize_session_state(self) -> None:
         """Initialize Streamlit session state variables."""
@@ -127,9 +78,7 @@ class StreamlitApp:
             "optimized_text": "",
             "processing_time": 0.0,
             "input_type": "URL",
-            "current_input": "",
-            "ai_simulation": True,
-            "processing_steps": []
+            "current_input": ""
         }
         
         for var, default_value in session_vars.items():
@@ -156,13 +105,6 @@ class StreamlitApp:
         """Render the input section of the application."""
         st.subheader("Content Input")
         
-        # AI Simulation toggle
-        st.session_state.ai_simulation = st.checkbox(
-            "Enable AI Processing Simulation", 
-            value=st.session_state.get("ai_simulation", True),
-            help="Show realistic AI processing steps and timing"
-        )
-        
         # Input type selection
         col1, col2 = st.columns([1, 3])
         with col1:
@@ -179,7 +121,7 @@ class StreamlitApp:
                 help_text = "Paste a valid article URL here. We'll extract and analyze the content automatically."
             else:
                 placeholder = "Paste your article content here..."
-                help_text = "Paste your text content here. Minimum 50 words recommended for best results."
+                help_text = "Paste your text content here for GEO optimization."
             
             st.session_state.current_input = st.text_area(
                 f"Enter your {st.session_state.input_type.lower()}:",
@@ -198,65 +140,6 @@ class StreamlitApp:
                     st.warning("Please enter a valid URL starting with http:// or https://")
             else:
                 word_count = len(st.session_state.current_input.split())
-                if word_count >= 50:
-                    st.success(f"Content ready for optimization ({word_count} words)")
-                elif word_count > 0:
-                    st.info(f"Current: {word_count} words. Recommended: 50+ words for better results")
-    
-    def _simulate_ai_processing(self, content: str) -> None:
-        """Simulate realistic AI processing with steps and delays."""
-        processing_steps = [
-            ("Analyzing content structure...", 1.2),
-            ("Extracting key topics and concepts...", 1.8),
-            ("Searching for authoritative sources...", 2.5),
-            ("Identifying relevant citations...", 2.0),
-            ("Finding expert quotes and statistics...", 2.2),
-            ("Generating enhanced content...", 1.5),
-            ("Optimizing for search visibility...", 1.0),
-            ("Finalizing optimization...", 0.8)
-        ]
-        
-        # Create progress containers
-        progress_bar = st.progress(0)
-        status_text = st.empty()
-        step_details = st.empty()
-        
-        st.session_state.processing_steps = []
-        
-        for i, (step_name, base_duration) in enumerate(processing_steps):
-            # Add some randomness to timing
-            duration = base_duration + random.uniform(-0.3, 0.5)
-            
-            # Update status
-            status_text.info(f"Step {i+1}/8: {step_name}")
-            
-            # Simulate processing time with incremental progress
-            start_time = time.time()
-            while time.time() - start_time < duration:
-                elapsed = time.time() - start_time
-                progress = (i + (elapsed / duration)) / len(processing_steps)
-                progress_bar.progress(min(progress, 1.0))
-                time.sleep(0.1)
-            
-            # Log completed step
-            st.session_state.processing_steps.append({
-                "step": step_name,
-                "duration": duration,
-                "completed": True
-            })
-            
-            # Show step completion
-            step_details.success(f"✓ {step_name} (completed in {duration:.1f}s)")
-        
-        # Final completion
-        progress_bar.progress(1.0)
-        status_text.success("AI processing completed successfully!")
-        time.sleep(0.5)
-        
-        # Clear simulation UI
-        progress_bar.empty()
-        status_text.empty()
-        step_details.empty()
 
     def _process_content(self) -> None:
         """Process the input content and generate optimized version."""
@@ -267,51 +150,24 @@ class StreamlitApp:
         try:
             start_time = time.time()
             
-            # Show different processing UI based on simulation setting
-            if st.session_state.ai_simulation:
-                st.markdown("### AI Processing in Progress")
-                
-                # Extract content first
+            # Standard processing
+            with st.spinner("Processing your content..."):
+                # Extract content if URL
                 if st.session_state.input_type == "URL":
-                    with st.spinner("Extracting content from URL..."):
-                        extracted_content = self.content_processor.extract_from_url(
-                            st.session_state.current_input
-                        )
-                        if not extracted_content:
-                            st.error("Could not extract content from URL. Please check the URL or try Raw Text input.")
-                            return
-                        st.session_state.article_text = extracted_content
-                        time.sleep(0.5)  # Brief pause for realism
+                    extracted_content = self.content_processor.fetch_text_from_url(
+                        st.session_state.current_input
+                    )
+                    if not extracted_content:
+                        st.error("Could not extract content from URL. Please check the URL or try Raw Text input.")
+                        return
+                    st.session_state.article_text = extracted_content
                 else:
                     st.session_state.article_text = st.session_state.current_input
                 
-                # Run AI simulation
-                self._simulate_ai_processing(st.session_state.article_text)
-                
-                # Actual optimization (hidden behind simulation)
+                # Optimize content
                 optimized_content = self.optimizer.optimize_content(
                     st.session_state.article_text
                 )
-                
-            else:
-                # Standard processing without simulation
-                with st.spinner("Processing your content..."):
-                    # Extract content if URL
-                    if st.session_state.input_type == "URL":
-                        extracted_content = self.content_processor.extract_from_url(
-                            st.session_state.current_input
-                        )
-                        if not extracted_content:
-                            st.error("Could not extract content from URL. Please check the URL or try Raw Text input.")
-                            return
-                        st.session_state.article_text = extracted_content
-                    else:
-                        st.session_state.article_text = st.session_state.current_input
-                    
-                    # Optimize content
-                    optimized_content = self.optimizer.optimize_content(
-                        st.session_state.article_text
-                    )
             
             # Update session state
             st.session_state.optimized_text = optimized_content
@@ -332,62 +188,24 @@ class StreamlitApp:
         st.markdown("---")
         st.subheader("Optimization Results")
         
-        # Success message
-        st.success("Content optimization completed successfully!")
-        
-        # Show processing summary if AI simulation was used
-        if st.session_state.ai_simulation and st.session_state.processing_steps:
-            with st.expander("AI Processing Summary", expanded=False):
-                st.markdown("**Completed Processing Steps:**")
-                total_step_time = 0
-                for i, step in enumerate(st.session_state.processing_steps, 1):
-                    st.markdown(f"{i}. ✓ {step['step']} ({step['duration']:.1f}s)")
-                    total_step_time += step['duration']
-                
-                st.markdown(f"**Total AI Processing Time:** {total_step_time:.1f}s")
-                st.markdown(f"**Overall Processing Time:** {st.session_state.processing_time:.2f}s")
-        
-        # Metrics
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            st.metric("Processing Time", f"{st.session_state.processing_time:.2f}s")
-        with col2:
-            original_words = len(st.session_state.article_text.split())
-            st.metric("Original Words", f"{original_words}")
-        with col3:
-            optimized_words = len(st.session_state.optimized_text.split())
-            word_diff = optimized_words - original_words
-            st.metric("Words Added", f"+{word_diff}", delta=word_diff if word_diff > 0 else None)
-        
         # Content comparison
         st.markdown("### Content Comparison")
         col1, col2 = st.columns(2)
         
         with col1:
             st.markdown("**Original Content**")
-            st.text_area(
-                "Original",
-                st.session_state.article_text,
-                height=400,
-                key="original_text_area",
-                help="Your original content before optimization",
-                label_visibility="collapsed"
-            )
+            with st.container():
+                st.markdown("---")
+                st.markdown(st.session_state.article_text)
         
         with col2:
             st.markdown("**Optimized Content**")
-            st.info("Enhanced with Citations & Quotes - Content enhanced with authoritative sources, expert quotes, and relevant statistics")
-            st.text_area(
-                "Optimized",
-                st.session_state.optimized_text,
-                height=400,
-                key="optimized_text_area",
-                help="Your content enhanced with citations, quotes, and statistics",
-                label_visibility="collapsed"
-            )
+            with st.container():
+                st.markdown("---")
+                st.markdown(st.session_state.optimized_text, unsafe_allow_html=True)
         
-        # AI Analysis Section
-        self._render_ai_responses_section()
+        # Interactive Query Section
+        self._render_interactive_query_section()
         
         # Action buttons
         st.markdown("### Actions")
@@ -405,144 +223,80 @@ class StreamlitApp:
                 mime="text/plain",
                 help="Download your optimized content as a text file"
             )
-    
-    def _generate_ai_analysis_responses(self, original_text: str, optimized_text: str) -> dict:
-        """Generate simulated AI responses comparing original vs optimized content."""
-        
-        # Calculate basic metrics for realistic responses
-        original_citations = len([word for word in original_text.split() if any(cite in word.lower() for cite in ['according', 'study', 'research', 'report', 'source'])])
-        optimized_citations = len([word for word in optimized_text.split() if any(cite in word.lower() for cite in ['according', 'study', 'research', 'report', 'source'])])
-        
-        citation_improvement = max(15, min(85, ((optimized_citations - original_citations) / max(1, original_citations)) * 100 + random.randint(20, 40)))
-        
-        # Generate varied but realistic responses
-        responses = {
-            "chatgpt": {
-                "title": "ChatGPT Analysis",
-                "avatar": "🤖",
-                "analysis": f"""**Content Quality Assessment:**
-
-✅ **Citation Density**: The optimized version shows a {citation_improvement:.0f}% improvement in authoritative source integration
-
-✅ **Credibility Signals**: Enhanced with {random.randint(3, 7)} additional expert quotes and {random.randint(2, 5)} statistical references
-
-✅ **Search Visibility**: Improved semantic richness and topical authority markers detected
-
-**Key Improvements:**
-• Added peer-reviewed source citations
-• Integrated domain expert perspectives  
-• Enhanced factual backing with current statistics
-• Improved E-A-T (Expertise, Authoritativeness, Trustworthiness) signals
-
-**Recommendation**: This optimized content is significantly more likely to rank higher in AI-powered search results due to enhanced credibility markers.""",
-                "score": f"{random.randint(85, 95)}/100"
-            },
-            
-            "claude": {
-                "title": "Claude Analysis", 
-                "avatar": "🎯",
-                "analysis": f"""**Comprehensive Content Evaluation:**
-
-📊 **Authority Enhancement**: {random.randint(78, 88)}% increase in authoritative backing through strategic citation placement
-
-📈 **Information Density**: The optimized version contains {random.randint(40, 60)}% more substantive, fact-based content
-
-🔍 **Search Algorithm Compatibility**: Strong alignment with modern AI search ranking factors
-
-**Detailed Assessment:**
-- **Original**: Basic informational content with limited source validation
-- **Optimized**: Research-backed narrative with expert consensus integration
-
-**Citation Quality Analysis:**
-• Academic sources: +{random.randint(3, 6)} references
-• Industry expert quotes: +{random.randint(2, 4)} authoritative voices  
-• Statistical evidence: +{random.randint(2, 5)} data points
-
-**Verdict**: The optimized content demonstrates superior informational reliability and search engine optimization potential.""",
-                "score": f"{random.randint(88, 96)}/100"
-            },
-            
-            "perplexity": {
-                "title": "Perplexity AI Analysis",
-                "avatar": "🔬", 
-                "analysis": f"""**Source Integration & Factual Analysis:**
-
-🎯 **Citation Effectiveness**: {random.randint(82, 92)}% improvement in source diversity and relevance
-
-📚 **Knowledge Base Alignment**: Enhanced compatibility with AI knowledge retrieval systems
-
-⚡ **Fact-Checking Confidence**: Increased verifiability through authoritative source backing
-
-**Optimization Highlights:**
-- Integrated {random.randint(4, 8)} high-authority domain sources
-- Added {random.randint(2, 5)} recent statistical validations
-- Enhanced topic expertise indicators
-
-**Search Performance Prediction:**
-• Organic visibility: +{random.randint(35, 55)}% expected improvement
-• Featured snippet potential: Significantly increased
-• AI chat integration: Enhanced likelihood of being referenced
-
-**Analysis**: The optimized content shows substantial improvement in meeting modern AI search quality standards.""",
-                "score": f"{random.randint(86, 94)}/100"
-            }
-        }
-        
-        return responses
-
-    def _render_ai_responses_section(self) -> None:
-        """Render simulated AI responses showing improved citation rates."""
-        st.markdown("### AI Search Engine Analysis")
-        st.info("See how leading AI systems would evaluate your optimized content for search visibility and citation quality.")
-        
-        # Generate AI responses
-        ai_responses = self._generate_ai_analysis_responses(
-            st.session_state.article_text, 
-            st.session_state.optimized_text
-        )
-        
-        # Create tabs for different AI responses
-        tab1, tab2, tab3 = st.tabs(["ChatGPT", "Claude", "Perplexity AI"])
-        
-        with tab1:
-            response = ai_responses["chatgpt"]
-            col1, col2 = st.columns([1, 4])
-            with col1:
-                st.markdown(f"## {response['avatar']}")
-                st.metric("Quality Score", response['score'])
-            with col2:
-                st.markdown(f"**{response['title']}**")
-                st.markdown(response['analysis'])
-        
-        with tab2:
-            response = ai_responses["claude"]
-            col1, col2 = st.columns([1, 4])
-            with col1:
-                st.markdown(f"## {response['avatar']}")
-                st.metric("Quality Score", response['score'])
-            with col2:
-                st.markdown(f"**{response['title']}**")
-                st.markdown(response['analysis'])
-        
-        with tab3:
-            response = ai_responses["perplexity"]
-            col1, col2 = st.columns([1, 4])
-            with col1:
-                st.markdown(f"## {response['avatar']}")
-                st.metric("Quality Score", response['score'])
-            with col2:
-                st.markdown(f"**{response['title']}**")
-                st.markdown(response['analysis'])
 
     def _clear_session_state(self) -> None:
         """Clear all session state variables."""
         keys_to_clear = [
             "optimized", "article_text", "optimized_text", 
-            "processing_time", "current_input", "processing_steps"
+            "processing_time", "current_input"
         ]
         for key in keys_to_clear:
             if key in st.session_state:
                 del st.session_state[key]
+
+    def _render_interactive_query_section(self) -> None:
+        """Render interactive query section where users can ask questions about the content."""
+        st.markdown("---")
+        st.markdown("### Ask AI About Your Content")
+        st.markdown("Ask any question about your content and see how AI responds using original vs optimized content.")
+        
+        # Query input
+        user_query = st.text_input(
+            "Enter your question:",
+            placeholder="e.g., What are the main benefits of this approach?",
+            key="user_query"
+        )
+        
+        if user_query and st.button("🚀 Get AI Response", type="primary"):
+            with st.spinner("Getting responses from Gemini AI..."):
+                try:
+                    # Get responses for both contents
+                    original_response = self._get_gemini_response(user_query, st.session_state.article_text)
+                    optimized_response = self._get_gemini_response(user_query, st.session_state.optimized_text)
+                    
+                    # Display responses side by side
+                    st.markdown("#### AI Responses Comparison")
+                    col1, col2 = st.columns(2)
+                    
+                    with col1:
+                        st.markdown("**Response from Original Content**")
+                        st.markdown(original_response)
+                    
+                    with col2:
+                        st.markdown("**Response from Optimized Content**")
+                        st.markdown(optimized_response)
+                        
+                except Exception as e:
+                    st.error(f"Error getting AI response: {str(e)}")
+    
+    def _get_gemini_response(self, query: str, content: str) -> str:
+        """Get response from Gemini API for a given query and content."""
+        try:
+            # Create prompt for Gemini
+            prompt = f"""
+            You are an AI assistant answering the following user query based on the provided content.
+
+            User Query: "{query}"
+
+            Content to base your answer on:
+            {content}
+
+            Instructions:
+            - Answer the query using only information from the provided content
+            - Be concise and helpful
+            - If the content doesn't contain relevant information, say so
+            - Cite specific parts of the content when relevant
+            - Keep response under 200 words
+
+            Response:
+            """
+            
+            # Use the existing optimizer's LLM
+            response = self.optimizer.llm.invoke(prompt)
+            return response.strip()
+            
+        except Exception as e:
+            return f"Sorry, I encountered an error: {str(e)}"
 
 
 def main():
