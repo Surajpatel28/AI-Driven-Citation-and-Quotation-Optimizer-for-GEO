@@ -1,5 +1,7 @@
 # Environment variables
 .env
+secrets.toml
+*.secrets.toml
 
 # Python cache files
 __pycache__/
