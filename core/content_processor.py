@@ -69,8 +69,15 @@ class ContentProcessor:
     def _initialize_nltk(self) -> None:
         """Initialize NLTK data."""
         try:
-            nltk.data.find("tokenizers/punkt")
+            nltk.data.find("tokenizers/punkt_tab")
         except LookupError:  # Raised when resource is not found
+            self.logger.info("Downloading NLTK punkt_tab tokenizer...")
+            nltk.download("punkt_tab")
+        
+        # Also ensure punkt is available for backward compatibility
+        try:
+            nltk.data.find("tokenizers/punkt")
+        except LookupError:
             self.logger.info("Downloading NLTK punkt tokenizer...")
             nltk.download("punkt")
 

@@ -244,3 +244,10 @@
 2025-08-10 13:23:51,021 INFO After sanitization: 1735 characters
 2025-08-10 13:23:51,021 INFO [Timing] Total optimization: 19.805s
 2025-08-10 13:23:51,022 INFO Final result: 1735 characters
+2025-08-10 13:51:14,172 INFO Starting optimization with 764 characters
+2025-08-10 13:51:14,174 INFO [Timing] Total preprocessing (fast): 0.000s
+2025-08-10 13:51:14,174 INFO Sending request to Gemini...
+2025-08-10 13:51:36,017 INFO Received response with 1632 characters
+2025-08-10 13:51:36,017 INFO After sanitization: 1632 characters
+2025-08-10 13:51:36,018 INFO [Timing] Total optimization: 21.845s
+2025-08-10 13:51:36,018 INFO Final result: 1632 characters
