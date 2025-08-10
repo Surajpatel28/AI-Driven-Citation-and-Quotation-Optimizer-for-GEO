@@ -9,17 +9,20 @@ This module handles all text processing operations including:
 """
 
 import re
+import sys
 import time
 import logging
 import requests
 import nltk
 import spacy
 import numpy as np
+import subprocess
 from typing import Dict, List, Optional, Union
 from bs4 import BeautifulSoup
 from sentence_transformers import SentenceTransformer
 from transformers import AutoTokenizer
-
+import subprocess
+import sys
 
 class ContentProcessor:
     """
@@ -65,18 +68,24 @@ class ContentProcessor:
         """Initialize NLTK data."""
         try:
             nltk.data.find("tokenizers/punkt")
-        except nltk.DownloadError:
+        except LookupError:  # Raised when resource is not found
             self.logger.info("Downloading NLTK punkt tokenizer...")
             nltk.download("punkt")
-    
+
     def _initialize_spacy(self, model_name: str) -> None:
         """Initialize spaCy model."""
         try:
             self.nlp = spacy.load(model_name)
-        except OSError:
+        except OSError:  # Raised when model is not installed
             self.logger.info(f"Downloading spaCy model '{model_name}'...")
-            spacy.cli.download(model_name)
-            self.nlp = spacy.load(model_name)
+            try:
+                result = subprocess.run([sys.executable, "-m", "spacy", "download", model_name], 
+                                      capture_output=True, text=True, check=True)
+                self.logger.info(f"Successfully downloaded {model_name}")
+                self.nlp = spacy.load(model_name)
+            except subprocess.CalledProcessError as e:
+                self.logger.error(f"Failed to download spaCy model: {e}")
+                raise
     
     def _initialize_sentence_transformer(self, model_name: str) -> None:
         """Initialize SentenceTransformer model."""
@@ -214,13 +223,13 @@ class ContentProcessor:
         """
         if self.tokenizer is None:
             # Fallback: rough estimation
-            return len(text.split()) * 1.3
+            return int(len(text.split()) * 1.3)
         
         try:
             return len(self.tokenizer.encode(text, truncation=False))
         except Exception as e:
             self.logger.error(f"Token estimation failed: {e}")
-            return len(text.split()) * 1.3
+            return int(len(text.split()) * 1.3)
     
     def get_max_output_tokens(self, text: str, content_type: str = "article") -> int:
         """

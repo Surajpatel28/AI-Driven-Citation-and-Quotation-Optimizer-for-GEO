@@ -228,3 +228,19 @@
 2025-08-10 11:42:40,522 INFO After sanitization: 1335 characters
 2025-08-10 11:42:40,523 INFO [Timing] Total optimization: 12.978s
 2025-08-10 11:42:40,523 INFO Final result: 1335 characters
+2025-08-10 13:21:12,456 INFO Initialized Gemini 2.5 Flash with thinking support
+2025-08-10 13:21:12,457 INFO Initialized Gemini model: gemini-2.5-flash
+2025-08-10 13:22:05,753 INFO Starting optimization with 1476 characters
+2025-08-10 13:22:05,772 INFO [Timing] Total preprocessing (fast): 0.019s
+2025-08-10 13:22:05,773 INFO Sending request to Gemini...
+2025-08-10 13:22:29,261 INFO Received response with 2198 characters
+2025-08-10 13:22:29,262 INFO After sanitization: 2198 characters
+2025-08-10 13:22:29,263 INFO [Timing] Total optimization: 23.510s
+2025-08-10 13:22:29,263 INFO Final result: 2198 characters
+2025-08-10 13:23:31,216 INFO Starting optimization with 764 characters
+2025-08-10 13:23:31,217 INFO [Timing] Total preprocessing (fast): 0.001s
+2025-08-10 13:23:31,218 INFO Sending request to Gemini...
+2025-08-10 13:23:51,020 INFO Received response with 1735 characters
+2025-08-10 13:23:51,021 INFO After sanitization: 1735 characters
+2025-08-10 13:23:51,021 INFO [Timing] Total optimization: 19.805s
+2025-08-10 13:23:51,022 INFO Final result: 1735 characters
