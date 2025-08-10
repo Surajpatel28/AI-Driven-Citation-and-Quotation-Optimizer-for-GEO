@@ -1,0 +1,5 @@
+# System packages required for Streamlit Cloud deployment
+# This file tells Streamlit Cloud which system packages to install
+
+# Required for spaCy
+build-essential

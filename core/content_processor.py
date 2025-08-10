@@ -10,8 +10,10 @@ This module handles all text processing operations including:
 
 import re
 import sys
+import os
 import time
 import logging
+import tempfile
 import requests
 import nltk
 import spacy
@@ -73,19 +75,49 @@ class ContentProcessor:
             nltk.download("punkt")
 
     def _initialize_spacy(self, model_name: str) -> None:
-        """Initialize spaCy model."""
+        """Initialize spaCy model with fallback for deployment environments."""
         try:
             self.nlp = spacy.load(model_name)
+            self.logger.info(f"Successfully loaded spaCy model: {model_name}")
         except OSError:  # Raised when model is not installed
-            self.logger.info(f"Downloading spaCy model '{model_name}'...")
-            try:
-                result = subprocess.run([sys.executable, "-m", "spacy", "download", model_name], 
-                                      capture_output=True, text=True, check=True)
-                self.logger.info(f"Successfully downloaded {model_name}")
-                self.nlp = spacy.load(model_name)
-            except subprocess.CalledProcessError as e:
-                self.logger.error(f"Failed to download spaCy model: {e}")
-                raise
+            # Try to download only in local development environment
+            if self._is_local_environment():
+                self.logger.info(f"Downloading spaCy model '{model_name}'...")
+                try:
+                    result = subprocess.run([sys.executable, "-m", "spacy", "download", model_name], 
+                                          capture_output=True, text=True, check=True)
+                    self.logger.info(f"Successfully downloaded {model_name}")
+                    self.nlp = spacy.load(model_name)
+                    return
+                except subprocess.CalledProcessError as e:
+                    self.logger.error(f"Failed to download spaCy model: {e}")
+            
+            # Fallback: disable spaCy features gracefully
+            self.logger.warning(f"spaCy model '{model_name}' not available. NER features will be disabled.")
+            self.nlp = None
+    
+    def _is_local_environment(self) -> bool:
+        """Check if running in local development environment."""
+        # Check for common deployment environment indicators
+        deployment_indicators = [
+            'STREAMLIT_CLOUD',
+            'HEROKU',
+            'RAILWAY',
+            'VERCEL',
+            'RENDER',
+            'PYTHONPATH'  # Often set in containerized environments
+        ]
+        
+        for indicator in deployment_indicators:
+            if indicator in os.environ:
+                return False
+                
+        # Check if we can write to the Python environment (local dev usually can)
+        try:
+            with tempfile.NamedTemporaryFile():
+                return True
+        except:
+            return False
     
     def _initialize_sentence_transformer(self, model_name: str) -> None:
         """Initialize SentenceTransformer model."""
@@ -312,6 +344,10 @@ class ContentProcessor:
         Returns:
             List of (entity_text, entity_label) tuples
         """
+        if self.nlp is None:
+            self.logger.warning("spaCy model not available, skipping entity extraction")
+            return []
+            
         try:
             doc = self.nlp(text)
             return [(ent.text, ent.label_) for ent in doc.ents]
